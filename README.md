@@ -4,14 +4,14 @@ Research toward [Beal's conjecture](https://en.wikipedia.org/wiki/Beal_conjectur
 
 ## Result
 
-**x⁵ + y⁵ = z¹¹ has no solutions in coprime nonzero integers, with no unproven assumptions.** Hence Beal's conjecture holds for the signatures (5,5,11), (5,11,5) and (11,5,5).
+**An independent, unconditional proof that x⁵ + y⁵ = z¹¹ has no solutions in coprime nonzero integers, along Dahmen–Siksek's route.**
 
-Dahmen and Siksek ([Acta Arith. 164 (2014)](https://doi.org/10.4064/aa164-1-5), [arXiv:1309.4030](https://arxiv.org/abs/1309.4030)) proved this only *assuming GRH*. In their §5.3 they reduce the GRH dependence to two facts:
+> **Not a new case.** Stoll ([arXiv:1506.04286](https://arxiv.org/abs/1506.04286), Thm 8.8, 2017) already proved x⁵ + y⁵ = zᵖ unconditionally for p ≤ 19, which includes p = 11. We found this after completing the work. What is new is the method and certificate: Zimmert's bound in degree > 20, a range-split `bnfcertify`, and exact generators. It applies directly to Stoll's GRH-only cases, starting with p = 23.
+
+Dahmen and Siksek ([Acta Arith. 164 (2014)](https://doi.org/10.4064/aa164-1-5), [arXiv:1309.4030](https://arxiv.org/abs/1309.4030)) proved (5,5,11) assuming GRH. In their §5.3 they reduce the GRH dependence to two facts, and this repository proves both unconditionally:
 
 1. the class group of the degree-22 field L₁₁ = ℚ[t]/(t²² + 2t¹¹ − 4) is trivial;
 2. the unit group used in the 2-descent is 2-saturated.
-
-This repository proves both unconditionally.
 
 | Step | Method | Result |
 |---|---|---|

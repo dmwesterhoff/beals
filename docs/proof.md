@@ -1,4 +1,4 @@
-# x⁵ + y⁵ = z¹¹ has no non-trivial primitive solutions (unconditionally)
+# x⁵ + y⁵ = z¹¹: an independent unconditional proof along the Dahmen–Siksek route
 
 ## Statement
 
@@ -6,21 +6,25 @@
 
   x⁵ + y⁵ = z¹¹.
 
-Since all three exponents are odd, the signatures (5, 5, 11), (5, 11, 5) and (11, 5, 5) are equivalent: move a term across and change its sign. So Beal's conjecture holds for these signatures.
+Since all three exponents are odd, the signatures (5, 5, 11), (5, 11, 5) and (11, 5, 5) are equivalent: move a term across and change its sign. This was first proven unconditionally by Stoll (2017); see below.
 
-## Status before this work
+## Status before this work, and what is new here
 
-Dahmen and Siksek proved this statement *assuming the Generalized Riemann Hypothesis* (GRH):
+**Correction (2026-10-09): this theorem was already known unconditionally.**
+
+- M. Stoll, *Chabauty without the Mordell–Weil group*, in: Algorithmic and Experimental Methods in Algebra, Geometry, and Number Theory, Springer (2017), 623–663, [arXiv:1506.04286](https://arxiv.org/abs/1506.04286). Theorem 8.8 proves that x⁵ + y⁵ = zᵖ has only trivial primitive solutions for every prime 7 ≤ p ≤ 53, unconditionally for p ≤ 19 and assuming GRH for p ≥ 23.
+- Stoll works with a different curve, C′ₚ : 5y² = 4xᵖ + 1, over ℚ, and uses "Selmer group Chabauty".
+- The 2025 survey [arXiv:2412.11933](https://arxiv.org/abs/2412.11933) does not list this result. We missed it the first time.
+
+**What this repository adds.** An *independent second proof* for p = 11 along Dahmen–Siksek's original route: the curve C₁₁,₀ over ℚ(√5), with the class group of a degree-22 field certified via Zimmert's bound. It is not a new case of Beal's conjecture.
+
+The method itself is reusable: Zimmert's bound instead of Minkowski's at degree > 20, a range-split `bnfcertify`, and an exact-generator certificate. It applies to Stoll's GRH-conditional cases; see "Next case" below.
+
+The original reference for the GRH-conditional route:
 
 > S. R. Dahmen, S. Siksek, *Perfect powers expressible as sums of two fifth or seventh powers*,
 > Acta Arith. 164 (2014), 65–100, doi:[10.4064/aa164-1-5](https://doi.org/10.4064/aa164-1-5),
 > [arXiv:1309.4030](https://arxiv.org/abs/1309.4030). Referred to below as [DS].
-
-Their Theorem 3 covers (5,5,11), (5,5,13) and (7,7,11) under GRH. The unconditional results are (5,5,7), (5,5,19) and (7,7,5).
-
-Later surveys still list x⁵ + y⁵ = zⁿ as solved only for n = 7 and n = 19:
-- Bennett, Chen, Dahmen and Yazdani, *Generalized Fermat equations: a miscellany* (2015). It remarks that the GRH-conditional cases "can be made unconditional with sufficiently large computation".
-- [arXiv:2412.11933](https://arxiv.org/abs/2412.11933), v2 (2025).
 
 ## Where GRH enters [DS]
 
@@ -155,4 +159,8 @@ python3 certify/check_results.py           # coverage and prime-count checks
 
 ## Next case
 
-The same method applies to x⁵ + y⁵ = z¹³ (field L₁₃ = ℚ[t]/(t²⁶ + 22t¹³ − 4), signature (2, 12)). Its Zimmert bound is 1.995·10¹⁰ (about 8.4·10⁸ primes). That is roughly 130× the work of L₁₁: days, not years, on one machine.
+Stoll's Theorem 8.8 covers x⁵ + y⁵ = zᵖ for 23 ≤ p ≤ 53 only under GRH. There, GRH enters only through the class group and units of ℚ(2^{1/p}) (his §7–8).
+
+For p = 23 the Zimmert bound for ℚ(2^{1/23}) is 2.74·10⁸: about 1.4·10⁷ primes, or a few core-hours with this pipeline. So **x⁵ + y⁵ = z²³ can very likely be made unconditional, which would be a genuinely new case.**
+
+For p = 29 the bound is 3.6·10¹¹, about a month on 8 cores. For p ≥ 31 the work grows by factors of 10 or more per prime and is out of reach.
