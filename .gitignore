@@ -6,3 +6,9 @@ __pycache__/
 build/
 *.log
 scratch/
+.tools/
+results/*.tmp
+results/L11.bnf
+results/*/*.err
+refs/*.pdf
+refs/ds-scripts/
