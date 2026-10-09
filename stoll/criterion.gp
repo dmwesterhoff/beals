@@ -76,6 +76,33 @@ l2sqrt(z, l, N) =
   x * lam^k;
 }
 
+\\ ---------- fast 2-adic square classes ----------
+\\ L_2 = Q_2(lambda) is totally ramified (e = l, residue field F_2). A basis of
+\\ L_2^*/L_2^*2 is: lambda; 1 + lambda^w for odd w < 2l; one unramified class
+\\ 1 + 4*eta. sq2(z) returns the coordinates [v(z) mod 2, a_1, a_3, ..., a_{2l-1}, b]
+\\ by peeling off the levels of z / lambda^v(z) (digit-by-digit as in l2sqrt).
+\\ Only z mod 4*lambda matters, so a few bits of 2-adic precision suffice.
+sq2(z, l, N = 10) =
+{
+  my(lam = Mod(t, t^l - 2), v, eps, x = Mod(1, t^l - 2), a = vector(l), b = 0, e, w);
+  l_cur = l;
+  v = lval(z, l);
+  if (v == oo, error("sq2: zero"));
+  eps = trunc2(z / lam^v, N);
+  for (iter = 1, 4 * l + 10,
+    e = trunc2(eps - x^2, N); w = lval(e, l);
+    if (w > 2 * l, break);
+    if (w == 2 * l, b = 1; break);
+    if (w % 2,
+      a[(w + 1) / 2] = 1 - a[(w + 1) / 2];
+      eps = trunc2(eps / (1 + lam^w), N),
+      x = trunc2(x + lam^(w / 2), N)));
+  concat([v % 2], concat(a, [b]));
+}
+
+\\ sq2 for an nf element (column or polmod) or a famat (homomorphism).
+vec2fast(nf, u, l) = famatapply(z -> sq2(Mod(lift(nfbasistoalg(nf, z)), t^l - 2), l), u) % 2;
+
 \\ ---------- halving: sigma, sigma' (Stoll, Lemma 8.4 and Corollary 5.4(2)) ----------
 
 \\ theta-power basis <-> lambda basis (exact rationals).
@@ -201,7 +228,7 @@ famatcharrank(nf, gens) =
 inimage2(R, z) =
 {
   my(nf = mapget(R, "nf"), V2S = mapget(R, "V2S"), zv);
-  zv = vec2(nf, nfalgtobasis(nf, lift(z)), mapget(R, "B2"), mapget(R, "P2"))~ * Mod(1, 2);
+  zv = vec2fast(nf, nfalgtobasis(nf, lift(z)), poldegree(nf.pol))~ * Mod(1, 2);
   (zv == 0) || (matrank(concat(V2S, zv)) == matrank(V2S));
 }
 
@@ -220,7 +247,7 @@ stollcriterion(l, bnf, prec = 120) =
   F = 4*x^l + 1;
   S5 = idealprimedec(nf, 5); M5 = apply(P -> nfmodprinit(nf, P), S5);
   P2 = idealprimedec(nf, 2); if (#P2 != 1 || P2[1].e != l, error("2 not totally ramified"));
-  P2 = P2[1]; B2 = sqclassbasis(nf, P2);
+  P2 = P2[1]; B2 = 0;
   \\ L({5},2) basis: -1, fundamental units (compact), S-units for primes above 5
   my(U = bnfunits(bnf), su = bnfunits(bnf, S5));
   gens = concat([-1], vector(#su[1] - 1, i, su[1][i]));
@@ -234,8 +261,8 @@ stollcriterion(l, bnf, prec = 120) =
   my(cr = famatcharrank(nf, gens));
   if (cr != #gens || #gens != #S5 + nf.r1 + nf.r2, error("L({5},2) basis check failed: rank ", cr, ", #gens ", #gens));
   mapput(R, "LS2_basis_verified", 1);
-  V5 = matrix(2 * #S5, #gens, i, j, 0); V2 = matrix(#B2, #gens, i, j, 0);
-  for (j = 1, #gens, V5[, j] = vec5(nf, gens[j], S5, M5)~; V2[, j] = vec2(nf, gens[j], B2, P2)~);
+  V5 = matrix(2 * #S5, #gens, i, j, 0); V2 = matrix(l + 2, #gens, i, j, 0);
+  for (j = 1, #gens, V5[, j] = vec5(nf, gens[j], S5, M5)~; V2[, j] = vec2fast(nf, gens[j], l)~);
   \\ local image of J'(Q_5): images of the 2-torsion points [h, 0], h | F over Q_5
   fac = factorpadic(F, 5, 30)[, 1];
   hs = apply(h -> h / pollead(h), Vec(fac));
@@ -278,7 +305,7 @@ stollcriterion(l, bnf, prec = 120) =
   my(v11 = vec5(nf, m11, S5, M5)~ * Mod(1, 2));
   mapput(R, "mu11_in_S", inLS && (#Q == 0 || Q * v11 == 0));
   if (!mapget(R, "mu11_in_S"), error("consistency check failed: mu((1,1)) not in S"));
-  mapput(R, "sigma_eq_conj86", vec2(nf, nfalgtobasis(nf, lift(sg)), B2, P2) == vec2(nf, nfalgtobasis(nf, lift(sigmaconj(l))), B2, P2));
+  mapput(R, "sigma_eq_conj86", sq2(sg, l) == sq2(sigmaconj(l), l));
   mapput(R, "PASS", ok);
   R;
 }

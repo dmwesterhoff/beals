@@ -77,3 +77,19 @@ def test_criterion_passes_for_l7_and_detects_classes_in_image():
 def test_criterion_rejects_wieferich_and_small_l():
     out = gp_fn("  print(iferr(stollcriterion(5, bnfinit(t^5 - 2, 1)); 0, E, 1));")
     assert out == ["1"]
+
+
+@pytest.mark.parametrize("ell", [7, 11])
+def test_fast_square_classes_agree_with_hilbert_symbols(ell):
+    # Same kernel on a spanning-ish family of random products: sq2 == 0 iff all Hilbert symbols trivial,
+    # and the two F_2-linear maps have equal rank on the family.
+    out = gp_fn(
+        f"  my(l = {ell}, nf = nfinit(t^l - 2), P = idealprimedec(nf, 2)[1]);\n"
+        "  my(B = sqclassbasis(nf, P), lam = Mod(t, t^l - 2), m(c) = Mod(c, t^l - 2));\n"
+        "  my(base = concat([lam, m(-1), m(5), m(3)], vector(2 * l, i, 1 + lam^i)));\n"
+        "  my(els = vector(60, k, prod(i = 1, #base, base[i]^random(2)) * (1 + 2 * lam^random(l))^2));\n"
+        "  my(M1 = matrix(l + 2, #els, i, j, sq2(els[j], l)[i]) * Mod(1, 2));\n"
+        "  my(M2 = matrix(#B, #els, i, j, hilbvec(nf, lift(els[j]), B, P)[i]) * Mod(1, 2));\n"
+        '  print(matrank(M1) == matrank(M2), " ", matrank(M1) == l + 2, " ", matker(M1) == matker(M2));'
+    )
+    assert out == ["1", "1", "1"]
