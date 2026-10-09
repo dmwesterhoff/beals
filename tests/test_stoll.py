@@ -93,3 +93,10 @@ def test_fast_square_classes_agree_with_hilbert_symbols(ell):
         '  print(matrank(M1) == matrank(M2), " ", matrank(M1) == l + 2, " ", matker(M1) == matker(M2));'
     )
     assert out == ["1", "1", "1"]
+
+
+def test_criterion_l37_regression_compact_units():
+    # Units of Q(2^(1/37)) come as products of ~250 factors; some factors are divisible by
+    # character primes. Those primes must be skipped, not crash or miscount.
+    out = gp_fn('  print(mapget(stollcriterion(37, bnfinit(t^37 - 2, 1)), "PASS"));', timeout=900)
+    assert out == ["1"]

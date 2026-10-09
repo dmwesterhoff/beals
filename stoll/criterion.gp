@@ -217,6 +217,9 @@ famatcharrank(nf, gens) =
     if (nf.index % p == 0, next);
     foreach(idealprimedec(nf, p), P,
       if (P.f != 1 || P.e != 1, next);
+      \\ skip P if it divides any factor of a compact representation (the
+      \\ product is a unit/S-unit, but individual factors need not be)
+      if (vecsum(apply(u -> if (isfamat(u), vecsum(apply(z -> nfeltval(nf, z, P) != 0, u[, 1]~)), nfeltval(nf, u, P) != 0), gens)), next);
       my(mp = nfmodprinit(nf, P), col);
       col = vector(#gens, i, famatapply(z -> my(v = nfmodpr(nf, z, mp)); if (v == 0, error("char: vanishes")); if (issquare(v), 0, 1), gens[i]));
       listput(cols, col); k++);
