@@ -1,0 +1,22 @@
+[project]
+name = "beals"
+version = "0.1.0"
+description = "Unconditional proof that x^5 + y^5 = z^11 has no non-trivial primitive solutions"
+requires-python = ">=3.10"
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "ruff>=0.6"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 110
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP"]
+
+[tool.pyright]
+venvPath = "."
+venv = ".venv"

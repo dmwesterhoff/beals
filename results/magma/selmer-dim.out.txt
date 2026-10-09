@@ -1,0 +1,4 @@
+Time: 7.560
+dim Sel2 = 1
+Running Magma V2.29-10.
+Seed: 1808356464; Total time: 7.599 seconds; Total memory usage: 32.09MB.
