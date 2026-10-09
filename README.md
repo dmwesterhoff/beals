@@ -2,7 +2,19 @@
 
 Research toward [Beal's conjecture](https://en.wikipedia.org/wiki/Beal_conjecture): if Aˣ + Bʸ = Cᶻ with positive integers A, B, C and x, y, z ≥ 3, then A, B and C share a common prime factor.
 
-## Result
+## Results
+
+### New: x⁵ + y⁵ = z²³ has no non-trivial primitive solutions (unconditionally)
+
+This settles Beal's conjecture for the signatures (5,5,23), (5,23,5) and (23,5,5). Full write-up: [docs/5-5-23.md](docs/5-5-23.md).
+
+- Previously known only assuming GRH: Stoll, [arXiv:1506.04286](https://arxiv.org/abs/1506.04286), Thm 8.8.
+- **What we certified:** the class number of ℚ(2^{1/23}) is 1. We used Zimmert's bound (273,676,831) and found an explicit, exactly verified generator for all 14,902,108 prime ideals below it.
+- **What we reimplemented:** Stoll's criterion, which was Magma-only and unpublished as code, now runs in free software (PARI/GP). It passes for p = 23 and reproduces his results for p = 7–41.
+- **What it depends on:** no GRH and no Magma.
+- **Not yet confirmed:** that it's new. Nothing in the survey, Stoll's 2024 handout, the 12 papers citing him, or a web search proves it. The authors haven't been asked.
+
+### Earlier: an independent proof of x⁵ + y⁵ = z¹¹
 
 **An independent, unconditional proof that x⁵ + y⁵ = z¹¹ has no solutions in coprime nonzero integers, along Dahmen–Siksek's route.**
 

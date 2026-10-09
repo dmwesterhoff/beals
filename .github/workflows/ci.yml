@@ -35,6 +35,11 @@ jobs:
           done
       - name: Reproducibility (regenerated outputs match committed ones)
         run: git diff --exit-code results/*/setup.out results/*/units.out
+      - name: Stoll criterion for l = 23 from scratch (must reproduce committed verdict)
+        run: |
+          cp results/stoll/l23.out /tmp/l23.committed
+          STOLL_BNF=results/L23/field.bnf JOBS=1 stoll/run_range.sh 23
+          diff <(grep -v '^ms ' /tmp/l23.committed) <(grep -v '^ms ' results/stoll/l23.out)
       - name: Tests
         run: pytest -q
       - name: Verify committed Phase 1 / generator chunk coverage
