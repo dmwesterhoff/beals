@@ -1,0 +1,6 @@
+#S = 6
+Time: 3.530
+dim L(S,2) = 18
+expected (Cl=1, unit rank 11, torsion +-1) = 18
+Running Magma V2.29-10.
+Seed: 1774933909; Total time: 3.609 seconds; Total memory usage: 32.09MB.
