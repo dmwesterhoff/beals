@@ -12,7 +12,13 @@ setup_main() =
   nf = B.nf;
   n = poldegree(g);
   if (B.no != 1, error("conditional class number is not 1"));
-  writebin("results/L11.bnf", B);
+  \\ the integral basis (hence disc and the ring of integers) is proven correct
+  if (nfcertify(nf) != [], error("nfcertify: maximal order not certified"));
+  \\ writebin appends to an existing file: write a fresh temp file, then rename
+  \\ atomically so concurrent readers never see a partial or doubled file.
+  system("rm -f results/L11.bnf.tmp");
+  writebin("results/L11.bnf.tmp", B);
+  system("mv -f results/L11.bnf.tmp results/L11.bnf");
 
   zb = zimmertbest(nf.r1, nf.r2);
   Z = zimmertZ(nf.r1, nf.r2, zb[2], zimmertalpha(zb[2]));
@@ -32,6 +38,8 @@ setup_main() =
   filewrite(f, Str("signature ", nf.sign));
   filewrite(f, Str("zimmert_gamma ", zb[2], " Z ", Z));
   filewrite(f, Str("zimmert_bound ", ZB));
+  filewrite(f, Str("primepi_zimmert_bound ", primepi(ZB)));
+  filewrite(f, "maximal_order_certified 1");
   filewrite(f, Str("minkowski_bound ", MB));
   filewrite(f, Str("vbase_size ", #V, " max_norm ", vecmax(apply(P -> idealnorm(nf, P), V))));
   filewrite(f, "vbase_all_principal_with_verified_generators 1");

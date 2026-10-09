@@ -17,19 +17,20 @@ ROOT = Path(__file__).resolve().parent.parent
 RESULTS = ROOT / "results"
 
 
-def zimmert_bound() -> int:
+def setup_value(key: str) -> int:
     for line in (RESULTS / "setup.out").read_text().splitlines():
-        if line.startswith("zimmert_bound "):
+        if line.startswith(key + " "):
             return int(line.split()[1])
-    raise SystemExit("zimmert_bound missing from results/setup.out")
+    raise SystemExit(f"{key} missing from results/setup.out")
 
 
-def check_step(step: str, bound: int) -> str:
+def check_step(step: str, bound: int, prime_count: int) -> str:
     outs = sorted((RESULTS / step).glob("*.out"))
     if not outs:
         raise SystemExit(f"{step}: no results")
     ranges: list[tuple[int, int]] = []
     ideals = 0
+    primes = 0
     for path in outs:
         lines = path.read_text().splitlines()
         if not lines or lines[-1] != "STATUS OK":
@@ -41,21 +42,26 @@ def check_step(step: str, bound: int) -> str:
         fields = lines[1].split()
         if fields[0] == "ideals":
             ideals += int(fields[1])
+        elif fields[0] == "primes":
+            primes += int(fields[1])
     ranges.sort()
     if ranges[0][0] != 2 or ranges[-1][1] != bound:
         raise SystemExit(f"{step}: covers [{ranges[0][0]}, {ranges[-1][1]}], expected [2, {bound}]")
     for (_, b1), (a2, _) in zip(ranges, ranges[1:], strict=False):
         if a2 != b1 + 1:
             raise SystemExit(f"{step}: gap or overlap between {b1} and {a2}")
-    extra = f", {ideals} prime ideals with verified generators" if ideals else ""
+    if primes and primes != prime_count:
+        raise SystemExit(f"{step}: {primes} primes checked, expected pi(bound) = {prime_count}")
+    extra = f", {ideals} prime ideals with verified generators" if ideals else f", {primes} primes"
     return f"{step.upper()} COMPLETE: {len(ranges)} contiguous chunks cover [2, {bound}]{extra}"
 
 
 def main(argv: list[str]) -> int:
     steps = argv or ["phase1", "generators"]
-    bound = zimmert_bound()
+    bound = setup_value("zimmert_bound")
+    prime_count = setup_value("primepi_zimmert_bound")
     for step in steps:
-        print(check_step(step, bound))
+        print(check_step(step, bound, prime_count))
     return 0
 
 
