@@ -157,10 +157,6 @@ python3 certify/check_results.py           # coverage and prime-count checks
 .venv/bin/pytest tests
 ```
 
-## Next case
+## Next case: done
 
-Stoll's Theorem 8.8 covers x⁵ + y⁵ = zᵖ for 23 ≤ p ≤ 53 only under GRH. There, GRH enters only through the class group and units of ℚ(2^{1/p}) (his §7–8).
-
-For p = 23 the Zimmert bound for ℚ(2^{1/23}) is 2.74·10⁸: about 1.4·10⁷ primes, or a few core-hours with this pipeline. So **x⁵ + y⁵ = z²³ can very likely be made unconditional, which would be a genuinely new case.**
-
-For p = 29 the bound is 3.6·10¹¹, about a month on 8 cores. For p ≥ 31 the work grows by factors of 10 or more per prime and is out of reach.
+x⁵ + y⁵ = z²³ has since been proven unconditionally with this method together with a free-software reimplementation of Stoll's criterion. See [5-5-23.md](5-5-23.md).
