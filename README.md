@@ -10,7 +10,7 @@ This settles Beal's conjecture for the signatures (5,5,23), (5,23,5) and (23,5,5
 
 - Previously known only assuming GRH: Stoll, [arXiv:1506.04286](https://arxiv.org/abs/1506.04286), Thm 8.8.
 - **What we certified:** the class number of ℚ(2^{1/23}) is 1. We used Zimmert's bound (273,676,831) and found an explicit, exactly verified generator for all 14,902,108 prime ideals below it.
-- **What we reimplemented:** Stoll's criterion, which was Magma-only and unpublished as code, now runs in free software (PARI/GP). It passes for p = 23 and reproduces his results for p = 7–41.
+- **What we reimplemented:** Stoll's criterion, which was Magma-only and unpublished as code, now runs in free software (PARI/GP). It passes for p = 23 and reproduces his results for every prime from 7 to 53.
 - **What it depends on:** no GRH and no Magma.
 - **Not yet confirmed:** that it's new. Nothing in the survey, Stoll's 2024 handout, the 12 papers citing him, or a web search proves it. The authors haven't been asked.
 
