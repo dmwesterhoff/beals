@@ -3,9 +3,9 @@
 \\ (via the conditional bnf) and verify exactly that (a) = P as ideals.
 \\ This uses neither the factor base nor the relation lattice: success means
 \\ every such P is principal, unconditionally.
-\\ Env: P1_A, P1_B, P1_BOUND, P1_OUT, optional BNF (default results/L11.bnf). Writes a count and a fingerprint
+\\ Env: FIELD, P1_A, P1_B, P1_BOUND, P1_OUT, optional BNF. Writes a count and a fingerprint
 \\ (sum of generator coordinates times random-ish weights mod a 61-bit prime).
-bnfpath() = my(b = getenv("BNF")); if (b, b, "results/L11.bnf");
+read("certify/fields.gp");
 
 gens_main() =
 {

@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """Check that chunked certification results cover [2, Zimmert bound] exactly.
 
-Usage: certify/check_results.py [step ...]   (default: phase1 generators)
+Usage: certify/check_results.py <field> [step ...]   (default steps: phase1 generators)
 
-For each step, every results/<step>/*.out must end in "STATUS OK", use the
-Zimmert bound recorded in results/setup.out, and the chunk ranges must be
+For each step, every results/<field>/<step>/*.out must end in "STATUS OK", use
+the Zimmert bound recorded in results/<field>/setup.out, and the chunk ranges must be
 contiguous from 2 to the bound. Exits non-zero on any gap, overlap or failure.
 """
 
@@ -17,15 +17,15 @@ ROOT = Path(__file__).resolve().parent.parent
 RESULTS = ROOT / "results"
 
 
-def setup_value(key: str) -> int:
-    for line in (RESULTS / "setup.out").read_text().splitlines():
+def setup_value(field_dir: Path, key: str) -> int:
+    for line in (field_dir / "setup.out").read_text().splitlines():
         if line.startswith(key + " "):
             return int(line.split()[1])
-    raise SystemExit(f"{key} missing from results/setup.out")
+    raise SystemExit(f"{key} missing from {field_dir}/setup.out")
 
 
-def check_step(step: str, bound: int, prime_count: int) -> str:
-    outs = sorted((RESULTS / step).glob("*.out"))
+def check_step(field_dir: Path, step: str, bound: int, prime_count: int) -> str:
+    outs = sorted((field_dir / step).glob("*.out"))
     if not outs:
         raise SystemExit(f"{step}: no results")
     ranges: list[tuple[int, int]] = []
@@ -57,11 +57,14 @@ def check_step(step: str, bound: int, prime_count: int) -> str:
 
 
 def main(argv: list[str]) -> int:
-    steps = argv or ["phase1", "generators"]
-    bound = setup_value("zimmert_bound")
-    prime_count = setup_value("primepi_zimmert_bound")
+    if not argv:
+        raise SystemExit(__doc__)
+    field_dir = RESULTS / argv[0]
+    steps = argv[1:] or ["phase1", "generators"]
+    bound = setup_value(field_dir, "zimmert_bound")
+    prime_count = setup_value(field_dir, "primepi_zimmert_bound")
     for step in steps:
-        print(check_step(step, bound, prime_count))
+        print(f"{argv[0]}: " + check_step(field_dir, step, bound, prime_count))
     return 0
 
 

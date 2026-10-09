@@ -1,4 +1,4 @@
-\\ Units of L11: prove that U = <-1, fu_1, ..., fu_11> (from the GRH-conditional
+\\ Units of the field $FIELD (e.g. L11): prove that U = <-1, fu_1, ..., fu_11> (from the GRH-conditional
 \\ bnf) is a finite-index, 2-saturated subgroup of the full unit group E.
 \\
 \\ 1. Each fu_i is an algebraic integer of norm +-1 (exact check).
@@ -6,10 +6,10 @@
 \\    index or 2, map u -> Legendre(u mod P / p). The 12 x k matrix over F_2 of
 \\    these characters for (-1, fu_1..fu_11) has rank 12.
 \\ Rank 12 implies -1, fu_1, ..., fu_11 are independent in L*/L*^2, hence
-\\ (r1 + r2 - 1 = 11, torsion of L is {+-1} since L has a real place)
+\\ (r1 + r2 - 1 units; torsion of L is {+-1} since L has a real place)
 \\ U has finite index in E, and no element of U \ U^2 is a square in L, so
 \\ [E : U] is odd.
-\\ Output: results/units.out (last line "STATUS OK" on success).
+\\ Output: results/$FIELD/units.out (last line "STATUS OK" on success).
 
 \\ F_2-rank of the quadratic-character matrix of gens (columns: degree-1 primes
 \\ above p > pstart not dividing the index), stopping once rank = #gens or after
@@ -31,8 +31,8 @@ charrank(nf, gens, pstart = 1000, maxcols = 400) =
   [rk, k, p];
 }
 
-bnfpath() = my(b = getenv("BNF")); if (b, b, "results/L11.bnf");
-outpath() = my(o = getenv("UNITS_OUT")); if (o, o, "results/units.out");
+read("certify/fields.gp");
+outpath() = my(o = getenv("UNITS_OUT")); if (o, o, Str(fielddir(), "/units.out"));
 
 units_main() =
 {

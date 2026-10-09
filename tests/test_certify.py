@@ -26,7 +26,7 @@ def gp(code: str, env: dict[str, str] | None = None, timeout: int = 600) -> str:
         capture_output=True,
         text=True,
         cwd=ROOT,
-        env={**os.environ, **(env or {})},
+        env={**os.environ, "FIELD": "L11", **(env or {})},
         timeout=timeout,
     )
     return proc.stdout + proc.stderr
@@ -39,7 +39,7 @@ def gp_script(script: str, env: dict[str, str], timeout: int = 600) -> str:
         capture_output=True,
         text=True,
         cwd=ROOT,
-        env={**os.environ, **env},
+        env={**os.environ, "FIELD": "L11", **env},
         timeout=timeout,
     )
     return proc.stdout + proc.stderr
@@ -149,7 +149,7 @@ def test_l11_units_are_two_saturated(tmp_path):
 
 
 def test_phase1_small_range_passes():
-    out_file = ROOT / "results" / "test-phase1.tmp"
+    out_file = ROOT / "results" / "L11" / "test-phase1.tmp"
     try:
         gp_script(
             "certify/phase1.gp",

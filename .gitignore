@@ -8,7 +8,8 @@ build/
 scratch/
 .tools/
 results/*.tmp
-results/L11.bnf
+results/*/field.bnf
+results/*/field.bnf.tmp
 results/*/*.err
 refs/*.pdf
 refs/ds-scripts/
