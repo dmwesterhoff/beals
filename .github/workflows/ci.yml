@@ -8,8 +8,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
       - name: Install build deps
@@ -29,6 +29,8 @@ jobs:
         run: .tools/pari/bin/gp -q -D parisizemax=2000000000 certify/setup.gp < /dev/null && tail -1 results/setup.out | grep -q "STATUS OK"
       - name: Units 2-saturation
         run: .tools/pari/bin/gp -q -D parisizemax=1000000000 certify/units.gp < /dev/null && tail -1 results/units.out | grep -q "STATUS OK"
+      - name: Reproducibility (regenerated outputs match committed ones)
+        run: git diff --exit-code results/setup.out results/units.out
       - name: Tests
         run: pytest -q
       - name: Verify committed Phase 1 / generator chunk coverage
