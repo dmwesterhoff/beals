@@ -1,0 +1,13 @@
+field L23
+pari_version [2, 19, 0]
+polynomial t^23 - 2
+disc -87579030453634096837343451956922810368 = [-1, 1; 2, 22; 23, 23]
+signature [1, 11]
+zimmert_gamma 0.42000000000000000000000000000000000000 Z 24.255343955718166840826865731902751404
+zimmert_bound 273676831
+primepi_zimmert_bound 14900524
+maximal_order_certified 1
+minkowski_bound 165183084499
+vbase_size 67 max_norm 349
+vbase_all_principal_with_verified_generators 1
+STATUS OK
