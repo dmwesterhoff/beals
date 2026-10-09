@@ -1,0 +1,10 @@
+pari_version [2, 19, 0]
+polynomial t^22 + 2*t^11 - 4
+disc 4167820768606195769002035200000000000 = [2, 20; 5, 11; 11, 22]
+signature [2, 10]
+zimmert_gamma 0.42500000000000000000000000000000000000 Z 23.318175440627643747182031131500697443
+zimmert_bound 152405135
+minkowski_bound 75252913349
+vbase_size 68 max_norm 389
+vbase_all_principal_with_verified_generators 1
+STATUS OK
