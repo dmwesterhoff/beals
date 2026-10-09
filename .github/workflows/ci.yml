@@ -25,13 +25,22 @@ jobs:
         run: python -m pip install pytest ruff
       - name: Lint
         run: ruff check . && ruff format --check .
-      - name: Setup (bnf + factor base generators)
-        run: .tools/pari/bin/gp -q -D parisizemax=2000000000 certify/setup.gp < /dev/null && tail -1 results/setup.out | grep -q "STATUS OK"
-      - name: Units 2-saturation
-        run: .tools/pari/bin/gp -q -D parisizemax=1000000000 certify/units.gp < /dev/null && tail -1 results/units.out | grep -q "STATUS OK"
+      - name: Setup and units for every field
+        run: |
+          for F in L11 L23; do
+            FIELD=$F .tools/pari/bin/gp -q -D parisizemax=2000000000 certify/setup.gp < /dev/null
+            tail -1 results/$F/setup.out | grep -q "STATUS OK"
+            FIELD=$F .tools/pari/bin/gp -q -D parisizemax=1000000000 certify/units.gp < /dev/null
+            tail -1 results/$F/units.out | grep -q "STATUS OK"
+          done
       - name: Reproducibility (regenerated outputs match committed ones)
-        run: git diff --exit-code results/setup.out results/units.out
+        run: git diff --exit-code results/*/setup.out results/*/units.out
+      - name: Stoll criterion for l = 23 from scratch (must reproduce committed verdict)
+        run: |
+          cp results/stoll/l23.out /tmp/l23.committed
+          STOLL_BNF=results/L23/field.bnf JOBS=1 stoll/run_range.sh 23
+          diff <(grep -v '^ms ' /tmp/l23.committed) <(grep -v '^ms ' results/stoll/l23.out)
       - name: Tests
         run: pytest -q
       - name: Verify committed Phase 1 / generator chunk coverage
-        run: python certify/check_results.py
+        run: for F in L11 L23; do python certify/check_results.py $F || exit 1; done

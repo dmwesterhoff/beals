@@ -1,0 +1,15 @@
+l 37
+pari_version [2, 19, 0]
+bnf_source bnfinit (GRH-conditional)
+class_number 1
+dim_LS2 21
+LS2_basis_verified 1
+dim_local5_image 1
+dim_S 19
+injective_at_2 1
+Zprime_hits [0, 0, 0, 0]
+mu11_in_S 1
+sigma_eq_conj86 1
+PASS 1
+ms 27276
+STATUS OK
