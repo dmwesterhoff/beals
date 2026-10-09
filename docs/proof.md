@@ -88,7 +88,7 @@ With α chosen by Zimmert's Bemerkung 1 and γ = 0.425, we get Z(2, 10) = 23.318
 
 **Primary proof: an explicit generator for every small prime.** For *every* prime ideal P of norm ≤ 152,405,135, we compute a generator a and verify exactly that (a) = P, by comparing HNF matrices. This uses only exact integer arithmetic. The GRH-conditional data only helps *find* a; it plays no part in the verification. Every class contains such a P (Zimmert), and every such P is principal, so **Cl(L₁₁) = 1**.
 - Scripts: `certify/generators.gp` and `certify/run_chunks.sh generators`.
-- Results: `results/generators/`, 64 chunks; the total ideal count is printed by `certify/check_results.py`.
+- Results: `results/generators/`. All 64 chunks pass, covering **8,570,075 prime ideals**, about 8.8 core-hours on an M3.
 
 **Supporting proof: PARI's `bnfcertify` Phase 1.** Let B be PARI's GRH-conditional `bnfinit` data, with factor base FB: 68 prime ideals, all of norm ≤ 389.
 
@@ -148,7 +148,7 @@ certify/build_pari.sh                      # PARI 2.19.0 + patch -> .tools/pari 
 .tools/pari/bin/gp -q -D parisizemax=2000000000 certify/setup.gp < /dev/null
 .tools/pari/bin/gp -q -D parisizemax=1000000000 certify/units.gp < /dev/null
 certify/run_chunks.sh phase1               # supporting proof, ~35 min on 8 cores
-certify/run_chunks.sh generators           # primary proof of (A), ~80 min on 8 cores
+certify/run_chunks.sh generators           # primary proof of (A), ~75 min on 8 cores (8.8 core-hours)
 python3 certify/check_results.py           # coverage and prime-count checks
 .venv/bin/pytest tests
 ```
