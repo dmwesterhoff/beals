@@ -53,3 +53,7 @@ certify/run_chunks.sh generators
 python3 certify/check_results.py
 python3 -m venv .venv && .venv/bin/pip install pytest ruff && .venv/bin/pytest
 ```
+
+## License
+
+MIT (see [LICENSE](LICENSE)), except `certify/pari-2.19.0-bnftestprimes-range.patch`, which modifies PARI/GP and is therefore GPL-2.0-or-later.
